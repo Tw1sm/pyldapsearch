@@ -44,7 +44,7 @@ def get_machine_name(domain_controller, domain):
     return s.getServerName()
 
 
-def init_ldap_connection(target, tls_version, domain, username, password, lmhash, nthash, domain_controller, kerberos, hashes, aesKey):
+def init_ldap_connection(target, tls_version, domain, username, password, lmhash, nthash, domain_controller, kerberos, hashes, aesKey, use_channel_binding):
     user = '%s\\%s' % (domain, username)
     if tls_version is not None:
         use_ssl = True
@@ -56,6 +56,12 @@ def init_ldap_connection(target, tls_version, domain, username, password, lmhash
         tls = None
     logging.info(f'Binding to {target}')
     ldap_server = ldap3.Server(target, get_info=ldap3.ALL, port=port, use_ssl=use_ssl, tls=tls)
+    
+    channel_binding = dict()
+    if use_channel_binding:
+        logging.debug('Enabling channel binding')
+        channel_binding = dict(channel_binding=ldap3.TLS_CHANNEL_BINDING)
+    
     if kerberos:
         ldap_session = ldap3.Connection(ldap_server)
         ldap_session.bind()
@@ -63,17 +69,17 @@ def init_ldap_connection(target, tls_version, domain, username, password, lmhash
     elif hashes is not None:
         if lmhash == "":
             lmhash = "aad3b435b51404eeaad3b435b51404ee"
-        ldap_session = ldap3.Connection(ldap_server, user=user, password=lmhash + ":" + nthash, authentication=ldap3.NTLM, auto_bind=True)
+        ldap_session = ldap3.Connection(ldap_server, user=user, password=lmhash + ":" + nthash, authentication=ldap3.NTLM, auto_bind=True, **channel_binding)
     elif username == '' and password == '':
         logging.debug('Performing anonymous bind')
-        ldap_session = ldap3.Connection(ldap_server, authentication=ANONYMOUS, auto_bind=True)
+        ldap_session = ldap3.Connection(ldap_server, authentication=ANONYMOUS, auto_bind=True, **channel_binding)
     else:
-        ldap_session = ldap3.Connection(ldap_server, user=user, password=password, authentication=ldap3.NTLM, auto_bind=True)
+        ldap_session = ldap3.Connection(ldap_server, user=user, password=password, authentication=ldap3.NTLM, auto_bind=True, **channel_binding)
 
     return ldap_server, ldap_session
 
 
-def init_ldap_session(domain, username, password, lmhash, nthash, kerberos, domain_controller, ldaps, hashes, aesKey, no_smb):
+def init_ldap_session(domain, username, password, lmhash, nthash, kerberos, domain_controller, ldaps, hashes, aesKey, no_smb, channel_binding):
     if kerberos:
         if no_smb:
             logging.debug(f'Setting connection target to {domain_controller} without SMB connection')
@@ -89,11 +95,11 @@ def init_ldap_session(domain, username, password, lmhash, nthash, kerberos, doma
     if ldaps is True:
         logging.debug('Targeting LDAPS')
         try:
-            return init_ldap_connection(target, ssl.PROTOCOL_TLSv1_2, domain, username, password, lmhash, nthash, domain_controller, kerberos, hashes, aesKey)
+            return init_ldap_connection(target, ssl.PROTOCOL_TLSv1_2, domain, username, password, lmhash, nthash, domain_controller, kerberos, hashes, aesKey, channel_binding)
         except ldap3.core.exceptions.LDAPSocketOpenError:
-            return init_ldap_connection(target, ssl.PROTOCOL_TLSv1, domain, username, password, lmhash, nthash, domain_controller, kerberos, hashes, aesKey)
+            return init_ldap_connection(target, ssl.PROTOCOL_TLSv1, domain, username, password, lmhash, nthash, domain_controller, kerberos, hashes, aesKey, channel_binding)
     else:
-        return init_ldap_connection(target, None, domain, username, password, lmhash, nthash, domain_controller, kerberos, hashes, aesKey)
+        return init_ldap_connection(target, None, domain, username, password, lmhash, nthash, domain_controller, kerberos, hashes, aesKey, channel_binding)
 
 
 def ldap3_kerberos_login(connection, target, user, password, domain='', lmhash='', nthash='', aesKey='', kdcHost=None, TGT=None, TGS=None, useCache=True):
@@ -392,6 +398,7 @@ def main(
                                         rich_help_panel='Connection Options'),
     aesKey: str = typer.Option(None, '-aesKey', help='AES key to use for Kerberos Authentication (128 or 256 bits)', rich_help_panel='Connection Options'),
     ldaps: bool = typer.Option(False, '-ldaps', help='Use LDAPS instead of LDAP', rich_help_panel='Connection Options',),
+    channel_binding: bool = typer.Option(False, '-channel-binding', help='Enable LDAPS channel binding', rich_help_panel='Connection Options',),
     no_smb: bool = typer.Option(False, '-no-smb', help='Do not make a SMB connection to the DC to get its hostname (useful for -k). '
                                         'Requires a hostname to be provided with -dc-ip',
                                         rich_help_panel='Connection Options'),
@@ -454,7 +461,7 @@ def main(
     try:
         ldap_server, ldap_session = init_ldap_session(domain=domain, username=username, password=password, lmhash=lm_hash, 
                                                         nthash=nt_hash, kerberos=kerberos, domain_controller=domain_controller, 
-                                                        ldaps=ldaps, hashes=hashes, aesKey=aesKey, no_smb=no_smb)
+                                                        ldaps=ldaps, hashes=hashes, aesKey=aesKey, no_smb=no_smb, channel_binding=channel_binding)
         ldapsearch = Ldapsearch(ldap_server, ldap_session, filter, attributes, result_count, search_base, no_sd, logs_dir, silent)
         logging.debug('LDAP bind successful')
     except ldap3.core.exceptions.LDAPSocketOpenError as e: 
