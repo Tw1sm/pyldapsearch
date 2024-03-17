@@ -410,7 +410,7 @@ def main(
     print(version.BANNER)
     logger.init()
 
-    logging.info(f'pyldapsearch v{__version__} - Fortalice ✪\n')
+    logging.info(f'pyldapsearch v{__version__} - @Tw1sm\n')
 
     domain, username, password = parse_credentials(target)
     
