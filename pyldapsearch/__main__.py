@@ -272,15 +272,17 @@ class Ldapsearch:
     _ignore_attributes = ['userCertificate']
 
 
-    def __init__(self, ldap_server, ldap_session, query_string, attributes, result_count, search_base, no_query_sd, logs_dir, silent):
+    def __init__(self, ldap_server, ldap_session, scope, query_string, attributes, result_count, search_base, no_query_sd, logs_dir, silent, output):
         self.ldap_server = ldap_server
         self.ldap_session = ldap_session
+        self.scope = scope
         self.query_string = query_string
         self.result_count = result_count
         self.search_base = search_base
         self.no_query_sd = no_query_sd
         self.logs_dir = logs_dir
         self.silent = silent
+        self.output = output
 
         logging.info(f'Distinguished name: {self.search_base}')
         logging.info(f'Filter: {self.query_string}')
@@ -303,6 +305,9 @@ class Ldapsearch:
 
 
     def _printlog(self, line, log=False):
+        if self.output != '' :
+            with open(self.output, 'a') as o :
+                o.write(f'{line}\n')
         with open(self.filename, 'a') as f:
             f.write(f'{line}\n')
         if log:
@@ -316,9 +321,9 @@ class Ldapsearch:
         try:
             if 'ntsecuritydescriptor' in self.attributes:
                 controls = ldap3.protocol.microsoft.security_descriptor_control(sdflags=0x07)
-                self.ldap_session.extend.standard.paged_search(self.search_base, self.query_string, attributes=self.attributes, size_limit=self.result_count, controls=controls, paged_size=500, generator=False)
+                self.ldap_session.extend.standard.paged_search(self.search_base, self.query_string, search_scope=self.scope, attributes=self.attributes, size_limit=self.result_count, controls=controls, paged_size=500, generator=False)
             else:
-                self.ldap_session.extend.standard.paged_search(self.search_base, self.query_string, attributes=self.attributes, size_limit=self.result_count, paged_size=500, generator=False)
+                self.ldap_session.extend.standard.paged_search(self.search_base, self.query_string, search_scope=self.scope, attributes=self.attributes, size_limit=self.result_count, paged_size=500, generator=False)
         except (ldap3.core.exceptions.LDAPAttributeError, ldap3.core.exceptions.LDAPInvalidFilterError) as e:
             print()
             logging.critical(f'Error: {str(e)}')
@@ -387,6 +392,7 @@ def main(
     result_count: int = typer.Option(0, '-limit', help='Limit the number of results to return', rich_help_panel='Search Options'),
     domain_controller: str = typer.Option('', '-dc-ip', help='Domain controller IP or hostname to query', rich_help_panel='Connection Options'),
     distinguished_name: str = typer.Option('', '-base-dn', help='Search base distinguished name to use. Default is base domain level', rich_help_panel='Search Options'),
+    scope: str = typer.Option('SUBTREE', '-scope', help='Scope the query has to be performed. [BASE, LEVEL, SUBTREE]', rich_help_panel='Search Options'),
     no_sd: bool = typer.Option(False, '-no-sd', help='Do not add nTSecurityDescriptor as an attribute queried by default. Reduces console output significantly', rich_help_panel='Search Options'),
     debug: bool = typer.Option(False, '-debug', help='Turn DEBUG output ON'),
     hashes: str = typer.Option(None, '-hashes', metavar="LMHASH:NTHASH", help='NTLM hashes, format is LMHASH:NTHASH', rich_help_panel='Connection Options'),
@@ -402,6 +408,7 @@ def main(
     no_smb: bool = typer.Option(False, '-no-smb', help='Do not make a SMB connection to the DC to get its hostname (useful for -k). '
                                         'Requires a hostname to be provided with -dc-ip',
                                         rich_help_panel='Connection Options'),
+    output : str = typer.Option('', '-output', help='Result output file for this specific search (logging is still enabled)', rich_help_panel='Output'),
     silent: bool = typer.Option(False, '-silent', help='Do not print query results to console (results will still be logged)', rich_help_panel='Search Options')):
     '''
     Tool for issuing manual LDAP queries which offers bofhound compatible output
@@ -410,7 +417,7 @@ def main(
     print(version.BANNER)
     logger.init()
 
-    logging.info(f'pyldapsearch v{__version__} - @Tw1sm\n')
+    logging.info(f'pyldapsearch v{__version__} - Fortalice ✪\n')
 
     domain, username, password = parse_credentials(target)
     
@@ -462,7 +469,7 @@ def main(
         ldap_server, ldap_session = init_ldap_session(domain=domain, username=username, password=password, lmhash=lm_hash, 
                                                         nthash=nt_hash, kerberos=kerberos, domain_controller=domain_controller, 
                                                         ldaps=ldaps, hashes=hashes, aesKey=aesKey, no_smb=no_smb, channel_binding=channel_binding)
-        ldapsearch = Ldapsearch(ldap_server, ldap_session, filter, attributes, result_count, search_base, no_sd, logs_dir, silent)
+        ldapsearch = Ldapsearch(ldap_server, ldap_session, scope, filter, attributes, result_count, search_base, no_sd, logs_dir, silent, output)
         logging.debug('LDAP bind successful')
     except ldap3.core.exceptions.LDAPSocketOpenError as e: 
         if 'invalid server address' in str(e):
