@@ -373,7 +373,7 @@ class Ldapsearch:
             val = entry[attr].value
 
         if type(val) is bytes:
-            if attr = 'cACertificate' :
+            if attr == 'cACertificate' :
                 val = val
             else :
                 try:
