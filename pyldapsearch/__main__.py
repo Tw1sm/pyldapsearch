@@ -373,11 +373,14 @@ class Ldapsearch:
             val = entry[attr].value
 
         if type(val) is bytes:
-            try:
-                val = val.decode('utf-8')
-            except UnicodeDecodeError as e:
-                logging.debug(f'Unable to decode {attr} as utf-8')
-                raise(UnicodeDecodeError)
+            if attr = 'cACertificate' :
+                val = val
+            else :
+                try:
+                    val = val.decode('utf-8')
+                except UnicodeDecodeError as e:
+                    logging.debug(f'Unable to decode {attr} as utf-8')
+                    raise(UnicodeDecodeError)
 
 
         return val
