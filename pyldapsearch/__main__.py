@@ -264,7 +264,7 @@ class Ldapsearch:
     _separator = '--------------------'
     # bofhound expects some attributes in a certain format
     _base64_attributes = ['nTSecurityDescriptor', 'msDS-GenerationId', 'auditingPolicy', 'dSASignature', 'mS-DS-CreatorSID',
-        'logonHours', 'schemaIDGUID']
+        'logonHours', 'schemaIDGUID', 'cACertificate']
     _raw_attributes = ['whenCreated', 'whenChanged', 'dSCorePropagationData', 'accountExpires', 'badPasswordTime', 'pwdLastSet',
         'lastLogonTimestamp', 'lastLogon', 'lastLogoff', 'maxPwdAge', 'minPwdAge', 'creationTime', 'lockOutObservationWindow',
         'lockoutDuration']
@@ -373,14 +373,11 @@ class Ldapsearch:
             val = entry[attr].value
 
         if type(val) is bytes:
-            if attr == 'cACertificate' :
-                val = val
-            else :
-                try:
-                    val = val.decode('utf-8')
-                except UnicodeDecodeError as e:
-                    logging.debug(f'Unable to decode {attr} as utf-8')
-                    raise(UnicodeDecodeError)
+            try:
+                val = val.decode('utf-8')
+            except UnicodeDecodeError as e:
+                logging.debug(f'Unable to decode {attr} as utf-8')
+                raise(UnicodeDecodeError)
 
 
         return val
