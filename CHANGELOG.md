@@ -1,4 +1,11 @@
 # Changelog
+## [v0.1.4] - 5/25/2024
+### Added
+- Merge in [#2](https://github.com/Tw1sm/pyldapsearch/pull/2) (Palu08)
+    - `-scope` flag to let the user chose between "BASE","LEVEL" and "SUBTREE" values
+    - `-output` flag to let the user chose a supplementary output file
+- `pycrytodome` dependency
+
 ## [v0.1.3] - 12/7/2023
 ### Added
 - Support for LDAPS channel binding
