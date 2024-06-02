@@ -377,11 +377,7 @@ class Ldapsearch:
             else:
                 val = ', '.join(entry[attr].value)
         elif attr in self._base64_attributes:
-            if attr.lower() == 'caertificate':
-                values = [base64.b64encode(val).decode('utf-8') for val in entry[attr].value]
-                val = ', '.join(values)
-            else:
-                val = base64.b64encode(entry[attr].value).decode('utf-8')
+            val = base64.b64encode(entry[attr].value).decode('utf-8')
         elif attr in self._bracketed_attributes:
             if attr == 'objectGUID':
                 val = format_uuid_le(entry[attr].value)[1:-1]
