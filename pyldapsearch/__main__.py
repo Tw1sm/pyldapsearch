@@ -365,13 +365,23 @@ class Ldapsearch:
         if attr in self._raw_attributes:
             val = entry[attr].raw_values[0].decode('utf-8')
         elif type(entry[attr].value) is list:
-            if type(entry[attr].value[0]) is bytes:
+            #
+            # if more than 1 cert is in the cACertificate prop, it will be a list of bytes and hit this block before the base64 block 
+            #
+            if attr == 'cACertificate':
+                values = [base64.b64encode(val).decode('utf-8') for val in entry[attr].value]
+                val = ', '.join(values)
+            elif type(entry[attr].value[0]) is bytes:
                 strings = [val.decode('utf-8') for val in entry[attr].value]
                 val = ', '.join(strings)
             else:
                 val = ', '.join(entry[attr].value)
         elif attr in self._base64_attributes:
-            val = base64.b64encode(entry[attr].value).decode('utf-8')
+            if attr.lower() == 'caertificate':
+                values = [base64.b64encode(val).decode('utf-8') for val in entry[attr].value]
+                val = ', '.join(values)
+            else:
+                val = base64.b64encode(entry[attr].value).decode('utf-8')
         elif attr in self._bracketed_attributes:
             if attr == 'objectGUID':
                 val = format_uuid_le(entry[attr].value)[1:-1]

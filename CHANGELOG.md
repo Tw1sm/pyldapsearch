@@ -1,4 +1,8 @@
 # Changelog
+## [v0.1.5] - 6/2/2024
+### Fixed
+- Fixed bug where `cACertificate` property would fail to base64 encode if more than 1 cert was present (attr formatted as list)
+
 ## [v0.1.4] - 5/25/2024
 ### Added
 - Merge in [#2](https://github.com/Tw1sm/pyldapsearch/pull/2) (Palu08)
