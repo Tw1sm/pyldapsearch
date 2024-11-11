@@ -359,7 +359,7 @@ class Ldapsearch:
             return None
         
         # sid encoding can be funny, use ldap3 func to handle and return
-        if attr == 'objectSid':
+        if attr in ['objectSid', 'securityIdentifier']:
             return format_sid(entry[attr][0])
 
         if attr in self._raw_attributes:
