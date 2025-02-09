@@ -2,7 +2,7 @@
 
 This is designed to be a python "port" of the ldapsearch BOF by TrustedSec, which is a part of this [repo](https://github.com/trustedsec/CS-Situational-Awareness-BOF).
 
-pyldapsearch allows you to execute LDAP queries from Linux in a fashion similar to that of the aforementioned BOF. Its output format closely mimics that of the BOF and all query output will automatically be logged to the user's home directory in `.pyldapsearch/logs`, which can ingested by [bofhound](https://github.com/fortalice/bofhound).
+pyldapsearch allows you to execute LDAP queries from Linux in a fashion similar to that of the aforementioned BOF. Its output format closely mimics that of the BOF and all query output will automatically be logged to the user's home directory in `.pyldapsearch/logs`, which can ingested by [bofhound](https://github.com/coffeegist/bofhound).
 
 ## Why would I ever use this?
 Great question. pyldapsearch was built for a scenario where the operator is utilizing Linux and is attempting to issue LDAP queries while flying under the radar (BloodHound will be too loud, expensive LDAP queries are alerted on, etc). When pyldapsearch is combined with bofhound, you can still obtain BloodHound compatible data that allows for AD visualization and identification of ACL-based attack paths, which are otherwise difficult to identify through manually querying LDAP.
