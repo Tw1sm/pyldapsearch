@@ -1,4 +1,8 @@
 # Changelog
+## [v0.1.6] - 2/8/2025
+## Fixed
+- Properly encode `securityIdentifer` attribute (for `trusteddomain` objects)
+
 ## [v0.1.5] - 6/2/2024
 ### Fixed
 - Fixed bug where `cACertificate` property would fail to base64 encode if more than 1 cert was present (attr formatted as list)
