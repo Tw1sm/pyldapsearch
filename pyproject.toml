@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pyldapsearch"
-version = "0.1.5"
+version = "0.1.6"
 description = "Tool for issuing manual LDAP queries which offers bofhound compatible output"
 authors = [
     "Matt Creel",
@@ -19,6 +19,7 @@ impacket = "^0.10.0"
 ldap3 = {git = "https://github.com/ly4k/ldap3"}
 rich = "^12.5.1"
 pycryptodome = "^3.20.0"
+setuptools = "^75.8.2"
 
 [tool.poetry.dev-dependencies]
 

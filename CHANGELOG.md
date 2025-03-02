@@ -1,4 +1,8 @@
 # Changelog
+## [v0.1.7] - 3/1/2025
+### Added
+- `setuptools` dependency to fix import error
+
 ## [v0.1.6] - 2/8/2025
 ## Fixed
 - Properly encode `securityIdentifer` attribute (for `trusteddomain` objects)
