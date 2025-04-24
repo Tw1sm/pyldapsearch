@@ -270,7 +270,8 @@ class Ldapsearch:
     _separator = '--------------------'
     # bofhound expects some attributes in a certain format
     _base64_attributes = ['nTSecurityDescriptor', 'msDS-GenerationId', 'auditingPolicy', 'dSASignature', 'mS-DS-CreatorSID',
-        'logonHours', 'cACertificate', 'pKIExpirationPeriod', 'pKIOverlapPeriod']
+        'logonHours', 'cACertificate', 'pKIExpirationPeriod', 'pKIOverlapPeriod', 'pKIKeyUsage', 'authorityRevocationList',
+        'certificateRevocationList' ]
     _raw_attributes = ['whenCreated', 'whenChanged', 'dSCorePropagationData', 'accountExpires', 'badPasswordTime', 'pwdLastSet',
         'lastLogonTimestamp', 'lastLogon', 'lastLogoff', 'maxPwdAge', 'minPwdAge', 'creationTime', 'lockOutObservationWindow',
         'lockoutDuration']
