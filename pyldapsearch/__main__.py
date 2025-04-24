@@ -270,11 +270,11 @@ class Ldapsearch:
     _separator = '--------------------'
     # bofhound expects some attributes in a certain format
     _base64_attributes = ['nTSecurityDescriptor', 'msDS-GenerationId', 'auditingPolicy', 'dSASignature', 'mS-DS-CreatorSID',
-        'logonHours', 'schemaIDGUID', 'cACertificate', 'pKIExpirationPeriod', 'pKIOverlapPeriod']
+        'logonHours', 'cACertificate', 'pKIExpirationPeriod', 'pKIOverlapPeriod']
     _raw_attributes = ['whenCreated', 'whenChanged', 'dSCorePropagationData', 'accountExpires', 'badPasswordTime', 'pwdLastSet',
         'lastLogonTimestamp', 'lastLogon', 'lastLogoff', 'maxPwdAge', 'minPwdAge', 'creationTime', 'lockOutObservationWindow',
         'lockoutDuration']
-    _bracketed_attributes = ['objectGUID']
+    _uuid_attributes = ['objectGUID', 'schemaIDGUID']
     _ignore_attributes = ['userCertificate']
 
 
@@ -378,11 +378,8 @@ class Ldapsearch:
                 val = ', '.join(entry[attr].value)
         elif attr in self._base64_attributes:
             val = base64.b64encode(entry[attr].value).decode('utf-8')
-        elif attr in self._bracketed_attributes:
-            if attr == 'objectGUID':
-                val = format_uuid_le(entry[attr].value)[1:-1]
-            else:
-                val = entry[attr].value[1:-1]
+        elif attr in self._uuid_attributes:
+            val = format_uuid_le(entry[attr].value)[1:-1]
         else:
             val = entry[attr].value
 
