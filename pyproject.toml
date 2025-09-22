@@ -13,15 +13,15 @@ include = ["CHANGELOG.md"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
+cffi = "^1.17.1"
 pyasn1 = "^0.4.8"
+click = "8.1.8"
 typer = "^0.9"
 impacket = "^0.10.0"
 ldap3 = {git = "https://github.com/ly4k/ldap3"}
 rich = "^12.5.1"
 pycryptodome = "^3.20.0"
 setuptools = "^75.8.2"
-
-[tool.poetry.dev-dependencies]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
