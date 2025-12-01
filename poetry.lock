@@ -437,6 +437,26 @@ reference = "HEAD"
 resolved_reference = "4da4c30cf2787bc8060127fecdbbe6fbe26c89ef"
 
 [[package]]
+name = "ldap3-bleeding-edge"
+version = "2.10.1.1338"
+description = "A strictly RFC 4510 conforming LDAP V3 pure Python client library (bleeding edge)"
+optional = false
+python-versions = "*"
+groups = ["main"]
+files = [
+    {file = "ldap3_bleeding_edge-2.10.1.1338-py3-none-any.whl", hash = "sha256:2ecdb2e78d48cb5108aeabf2077ce8d3b7ad24747d5b6e96ab4529e247c512ac"},
+    {file = "ldap3_bleeding_edge-2.10.1.1338.tar.gz", hash = "sha256:ee3e56d42d2c72f8e6ea3ddeb9e36899d4d177e5338ac861af65356dbd60077b"},
+]
+
+[package.dependencies]
+cryptography = "*"
+pyasn1 = ">=0.4.6"
+pycryptodomex = "*"
+
+[package.extras]
+kerberos = ["gssapi ; platform_system != \"Windows\"", "winkerberos ; platform_system == \"Windows\""]
+
+[[package]]
 name = "ldapdomaindump"
 version = "0.10.0"
 description = "Active Directory information dumper via LDAP"
@@ -833,4 +853,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.9"
-content-hash = "8414c6ca74ac644769eaa8a31c5bf6f6213ac065da269b0b609394dbb6eb8f89"
+content-hash = "aef3bc4499ed9359bded7d53f97525337ace1b9c3fe18a9071ea1d3617a5517a"

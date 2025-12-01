@@ -1,4 +1,8 @@
 # Changelog
+## [v0.1.8] - 12/1/2025
+### Changed
+- Switch ldap3 dependency from [https://github.com/ly4k/ldap3](https://github.com/ly4k/ldap3) to `ldap3-bleeding-edge`
+
 ## [v0.1.7] - 3/1/2025
 ### Added
 - `setuptools` dependency to fix import error
