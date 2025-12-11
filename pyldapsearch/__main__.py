@@ -394,7 +394,12 @@ class Ldapsearch:
 
         return val
 
-app = typer.Typer(add_completion=False)
+app = typer.Typer(
+    add_completion=False,
+    context_settings={'help_option_names': ['-h', '--help']},
+    pretty_exceptions_enable=False
+)
+
 
 @app.command(no_args_is_help=True)
 def main(

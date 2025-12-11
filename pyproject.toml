@@ -18,10 +18,10 @@ pyasn1 = "^0.4.8"
 click = "8.1.8"
 typer = "^0.9"
 impacket = "^0.10.0"
-ldap3 = {git = "https://github.com/ly4k/ldap3"}
 rich = "^12.5.1"
 pycryptodome = "^3.20.0"
 setuptools = "^75.8.2"
+ldap3-bleeding-edge = "^2.10.1.1338"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
