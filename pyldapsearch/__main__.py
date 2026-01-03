@@ -369,7 +369,7 @@ class Ldapsearch:
             #
             # if more than 1 cert is in the cACertificate prop, it will be a list of bytes and hit this block before the base64 block 
             #
-            if attr == 'cACertificate':
+            if attr in self._base64_attributes:
                 values = [base64.b64encode(val).decode('utf-8') for val in entry[attr].value]
                 val = ', '.join(values)
             elif type(entry[attr].value[0]) is bytes:
