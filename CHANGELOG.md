@@ -1,4 +1,8 @@
 # Changelog
+## [v0.1.9] - 1/6/2026
+### Added
+- Support for parsing dnsRecord attributes ([#2](https://github.com/Tw1sm/pyldapsearch/pull/7))
+
 ## [v0.1.8] - 12/1/2025
 ### Changed
 - Switch ldap3 dependency from [https://github.com/ly4k/ldap3](https://github.com/ly4k/ldap3) to `ldap3-bleeding-edge`
