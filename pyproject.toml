@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pyldapsearch"
-version = "0.1.8"
+version = "0.1.9"
 description = "Tool for issuing manual LDAP queries which offers bofhound compatible output"
 authors = [
     "Matt Creel",
