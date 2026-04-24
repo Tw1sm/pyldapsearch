@@ -1,4 +1,7 @@
 logs/*
 venv/
+.venv/
 *.pyc
 dist/*
+*.ccache
+scripts/
