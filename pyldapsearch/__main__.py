@@ -4,7 +4,6 @@ import asyncio
 import base64
 import binascii
 import datetime
-import json
 import logging
 import os
 import time
@@ -36,21 +35,6 @@ def get_dn(domain):
         base += f",DC={comp}"
 
     return base[1:]
-
-
-def get_machine_name(domain_controller, domain):
-    if domain_controller is not None:
-        s = SMBConnection(domain_controller, domain_controller)
-    else:
-        s = SMBConnection(domain, domain)
-    try:
-        s.login("", "")
-    except Exception:
-        if s.getServerName() == "":
-            raise Exception("Error while anonymous logging into %s" % domain)
-    else:
-        s.logoff()
-    return s.getServerName()
 
 
 def _get_kerberos_target(domain_controller, domain):
