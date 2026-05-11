@@ -21,11 +21,6 @@ uv sync
 uv run pyldapserach --help
 ```
 
-## Usage
-```
-
-```
-
 ## Examples
 Query all the data - if you intend to do this, just run BloodHound :)
 ```
