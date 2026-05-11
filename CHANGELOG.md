@@ -1,4 +1,10 @@
 # Changelog
+## [v0.2.0] - 4/24/2026
+### Changed
+- Replace the `ldap3` backend with `msldap` while preserving the existing `TARGET` syntax and core auth flags
+- Switch project packaging and development workflow from Poetry to `uv`
+
+ 
 ## [v0.1.9] - 1/6/2026
 ### Added
 - Support for parsing dnsRecord attributes ([#2](https://github.com/Tw1sm/pyldapsearch/pull/7))

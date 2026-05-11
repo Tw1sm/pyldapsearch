@@ -1,31 +1,29 @@
-[tool.poetry]
+[project]
 name = "pyldapsearch"
 version = "0.1.9"
 description = "Tool for issuing manual LDAP queries which offers bofhound compatible output"
-authors = [
-    "Matt Creel",
-    "Adam Brown"
-]
+authors = [{ name = "Matt Creel" }, { name = "Adam Brown" }]
 readme = "README.md"
-homepage = "https://github.com/fortalice/pyldapsearch"
-repository = "https://github.com/fortalice/pyldapsearch"
-include = ["CHANGELOG.md"]
+requires-python = ">=3.9"
+dependencies = [
+    "cffi>=1.17.1",
+    "click==8.1.8",
+    "impacket>=0.10.0",
+    "msldap>=0.5.15",
+    "pyasn1>=0.4.8",
+    "pycryptodome>=3.20.0",
+    "rich>=12.5.1",
+    "setuptools>=75.8.2",
+    "typer>=0.9",
+]
 
-[tool.poetry.dependencies]
-python = "^3.9"
-cffi = "^1.17.1"
-pyasn1 = "^0.4.8"
-click = "8.1.8"
-typer = "^0.9"
-impacket = "^0.10.0"
-rich = "^12.5.1"
-pycryptodome = "^3.20.0"
-setuptools = "^75.8.2"
-ldap3-bleeding-edge = "^2.10.1.1338"
+[project.urls]
+Homepage = "https://github.com/fortalice/pyldapsearch"
+Repository = "https://github.com/fortalice/pyldapsearch"
+
+[project.scripts]
+pyldapsearch = "pyldapsearch.__main__:app"
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
-
-[tool.poetry.scripts]
-pyldapsearch = "pyldapsearch.__main__:app"
+requires = ["hatchling>=1.27.0"]
+build-backend = "hatchling.build"

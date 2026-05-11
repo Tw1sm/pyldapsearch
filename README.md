@@ -10,13 +10,16 @@ Great question. pyldapsearch was built for a scenario where the operator is util
 Outside of usage during detection-conscious and bofhound-related situations, pyldapsearch can be useful for issuing targeted, one-off LDAP queries during generic engagements.
 
 ## Installation
-Use `pip3` or `pipx`
+Use `uv`
 ```
-pip3 install pyldapsearch
-```
+curl -LsSf https://astral.sh/uv/install.sh | sh
 
-## Usage
-![](.github/help.png)
+# Install pyldapsearch 
+git clone https://github.com/Tw1sm/pyldapserach
+cd pyldapserach
+uv sync
+uv run pyldapserach --help
+```
 
 ## Examples
 Query all the data - if you intend to do this, just run BloodHound :)
@@ -57,15 +60,6 @@ pyldapsearch 'ez.lab'/'':'' '(objectClass=*)'
 Perform a query across a domain trust
 ```
 pyldapsearch ez.lab/administrator:pass '(objectClass=*)' -base-dn 'DC=otherdomain,DC=local' -dc-ip 10.1.4.20
-```
-
-## Development
-pyldapsearch uses Poetry to manage dependencies. Install from source and setup for development with:
-```shell
-git clone https://github.com/fortalice/pyldapsearch
-cd pyldapsearch
-poetry install
-poetry run pyldapsearch
 ```
 
 ## References
