@@ -62,6 +62,16 @@ Perform a query across a domain trust
 pyldapsearch ez.lab/administrator:pass '(objectClass=*)' -base-dn 'DC=otherdomain,DC=local' -dc-ip 10.1.4.20
 ```
 
+Execute a query with a custom connection timeout (`-timeout`), safe attribute list, output file, and debug logging
+```
+uv run pyldapsearch 'DOMAIN.LOCAL/USER:PASS' '(objectClass=*)' -attributes "$SAFE_ATTRS" -dc-ip DC_IP -timeout 60 -output domain-recon.txt -debug
+```
+
+Execute a query over LDAPS (`-ldaps`) with a custom timeout
+```
+pyldapsearch 'DOMAIN.LOCAL/USER:PASS' '(objectClass=*)' -dc-ip DC_IP -ldaps -timeout 60
+```
+
 ## References
 - ldapsearch ([CS-Situational-Awareness-BOF](https://github.com/trustedsec/cs-situational-awareness-bof))
 - [ldapconsole](https://github.com/p0dalirius/ldapconsole)
